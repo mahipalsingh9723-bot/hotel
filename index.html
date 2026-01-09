@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LuxuryStay Hotel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: #f4f6f8; color: #333; }
+
+        header { background: linear-gradient(to right, #0f2027, #203a43, #2c5364); padding: 20px 60px; position: sticky; top: 0; z-index: 1000; }
+        nav { display: flex; justify-content: space-between; align-items: center; }
+        nav h1 { color: #fff; font-size: 26px; }
+        nav ul { list-style: none; display: flex; gap: 25px; }
+        nav ul li a { color: #fff; text-decoration: none; font-weight: 500; transition: 0.3s; }
+        nav ul li a:hover { color: #f9c74f; }
+
+        section { padding: 80px 60px; }
+        .hero { height: 90vh; background: url("https://www.travelplusstyle.com/wp-content/uploads/2016/01/sonevajani-1880.jpg") center/cover no-repeat; display: flex; align-items: center; justify-content: center; text-align: center; color: white; }
+        .hero h2 { font-size: 52px; margin-bottom: 20px; }
+        .btn { margin-top: 25px; padding: 12px 30px; border: none; background: #f9c74f; color: #000; font-weight: bold; cursor: pointer; border-radius: 5px; }
+
+        .about, .rooms, .gallery, .booking, .auth, .contact { background: white; border-radius: 12px; margin-bottom: 40px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        h3 { text-align: center; margin-bottom: 30px; font-size: 32px; }
+
+        .rooms-grid, .gallery-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .card { background: #f9f9f9; border-radius: 10px; overflow: hidden; transition: 0.3s; }
+        .card:hover { transform: translateY(-8px); }
+        .card img { width: 100%; height: 180px; object-fit: cover; }
+        .card-content { padding: 20px; }
+
+        form { max-width: 600px; margin: auto; }
+        form input, form textarea, form select { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #ccc; }
+
+        footer { background: #0f2027; color: white; padding: 30px; text-align: center; }
+        footer p { font-size: 14px; }
+
+        .gallery { background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url("https://via.placeholder.com/1600x900") center/cover no-repeat; border-radius: 12px; }
+        .gallery h3 { color: #fff; }
+        .gallery-item { width: 100%; height: 220px; overflow: hidden; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); transition: 0.4s; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.4s; }
+        .gallery-item:hover img { transform: scale(1.1); }
+
+        @media(max-width: 768px) {
+            header { padding: 20px; }
+            section { padding: 60px 20px; }
+            .hero h2 { font-size: 36px; }
+        }
+    </style>
+
+    <script>
+        // Toggle Login/Register Forms
+        function showRegister() {
+            document.getElementById("loginForm").style.display = "none";
+            document.getElementById("registerForm").style.display = "block";
+        }
+
+        function showLogin() {
+            document.getElementById("registerForm").style.display = "none";
+            document.getElementById("loginForm").style.display = "block";
+        }
+
+        // Admin Login
+        function loginUser(event) {
+            event.preventDefault();
+            const username = document.getElementById("loginUsername").value;
+            const password = document.getElementById("loginPassword").value;
+
+            if (username === "admin" && password === "admin123") {
+                sessionStorage.setItem("isAdminLoggedIn", "true");
+                window.location.href = "admin.html";
+            } else {
+                document.getElementById("loginError").innerText = "Invalid username or password!";
+            }
+        }
+
+        // Booking Form Functionality
+        function submitBooking(event) {
+            event.preventDefault();
+
+            const name = document.getElementById("bname").value;
+            const email = document.getElementById("bemail").value;
+            const room = document.getElementById("broom").value;
+            const checkin = document.getElementById("bcheckin").value;
+            const checkout = document.getElementById("bcheckout").value;
+
+            const booking = {
+                id: Date.now(),
+                name,
+                email,
+                room,
+                checkin,
+                checkout,
+                status: "Pending"
+            };
+
+            let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+            bookings.push(booking);
+            localStorage.setItem("bookings", JSON.stringify(bookings));
+
+            alert("✅ Booking request sent successfully! Awaiting admin approval.");
+            document.getElementById("bookingForm").reset();
+        }
+    </script>
+</head>
+
+<body>
+
+<header>
+    <nav>
+        <h1>LuxuryStay</h1>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#rooms">Rooms</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#booking">Booking</a></li>
+            <li><a href="#auth">Login</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section class="hero" id="home">
+    <div>
+        <h2 style="color: black;">Experience Luxury & Comfort</h2>
+        <p style="color: black;">Your perfect stay begins here</p>
+        <button class="btn" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'});">Book Now</button>
+    </div>
+</section>
+
+<section class="about" id="about">
+    <h3>About Our Hotel</h3>
+    <p style="text-align:center; max-width:800px; margin:auto;">
+        LuxuryStay Hotel offers world-class hospitality with elegant rooms,
+        premium services, and breathtaking views to make your stay unforgettable.LuxuryStay Hotel redefines world-class hospitality with its elegantly designed rooms, premium amenities, and exceptional service.
+Every corner reflects sophistication and comfort, offering guests a sanctuary of relaxation amidst breathtaking surroundings.
+Whether you’re traveling for business or leisure, LuxuryStay ensures an unforgettable experience filled with warmth, elegance, and modern luxury.
+    </p>
+</section>
+
+<section class="rooms" id="rooms">
+    <h3>Our Rooms</h3>
+    <div class="rooms-grid">
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427">
+            <div class="card-content"><h4>Deluxe Room</h4><p>$120 / night</p>
+                <br><button class="btn" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'});">Book Now</button>
+            </div>
+        </div>
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39">
+            <div class="card-content"><h4>Executive Suite</h4><p>$200 / night</p><br>
+            <button class="btn" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'});">Book Now</button>
+        </div>
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b">
+            <div class="card-content"><h4>Luxury Suite</h4><p>$350 / night</p><br>
+            <button class="btn" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'});">Book Now</button>
+        </div>
+    </div>
+</section>
+
+<section class="gallery" id="gallery">
+    <h3>Our Gallery</h3>
+    <div class="gallery-container">
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1566073771259-6a8506099945" alt="Hotel Lobby"></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511" alt="Luxury Room"></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb" alt="Hotel Exterior"></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1590490360182-c33d57733427" alt="Deluxe Room"></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b" alt="Suite Room"></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa" alt="Hotel Pool"></div>
+    </div>
+</section>
+
+<section class="booking" id="booking">
+    <h3>Book a Room</h3>
+    <form id="bookingForm" onsubmit="submitBooking(event)">
+        <input type="text" id="bname" placeholder="Full Name" required>
+        <input type="email" id="bemail" placeholder="Email" required>
+        <select id="broom" required>
+            <option value="">Select Room Type</option>
+            <option value="Deluxe">Deluxe</option>
+            <option value="Executive">Executive</option>
+            <option value="Luxury">Luxury</option>
+        </select>
+        <input type="date" id="bcheckin" required>
+        <input type="date" id="bcheckout" required>
+        <button class="btn" type="submit">Confirm Booking</button>
+    </form>
+</section>
+
+<section class="auth" id="auth">
+    <h3>User Login</h3>
+    <form id="loginForm" onsubmit="loginUser(event)">
+        <input type="text" id="loginUsername" placeholder="Username" required>
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <button class="btn" type="submit">Login</button>
+        <p style="text-align:center; margin-top:15px;">New user? <a href="#" onclick="showRegister()" style="color:#f9c74f; font-weight:600;">Register now</a></p>
+        <p id="loginError" style="color:red; text-align:center;"></p>
+    </form>
+    <form id="registerForm" style="display:none;">
+        <h3>Register</h3>
+        <input type="text" placeholder="Full Name" required>
+        <input type="email" placeholder="Email" required>
+        <input type="password" placeholder="Create Password" required>
+        <button class="btn">Register</button>
+        <p style="text-align:center; margin-top:15px;">Already have an account? <a href="#" onclick="showLogin()" style="color:#f9c74f; font-weight:600;">Login here</a></p>
+    </form>
+</section>
+
+<section class="contact" id="contact">
+    <h3>Contact Us</h3>
+    <form>
+        <input type="text" placeholder="Your Name">
+        <input type="email" placeholder="Your Email">
+        <textarea rows="4" placeholder="Your Message"></textarea>
+        <button class="btn">Send Message</button>
+    </form>
+</section>
+
+<footer>
+    <p>© 2026 LuxuryStay Hotel | Designed by Web Designer</p>
+</footer>
+
+</body>
+</html>
